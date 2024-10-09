@@ -20,6 +20,8 @@ describe('TodoList Test', function () {
             expect(await todoList.owner()).to.equal(owner);
         })
 
+        
+
         it('should be able to create list as the owner', async function () {
             const { todoList, owner } = await loadFixture(deploymentTodoListFixture);
             const title = 'Coding Time';
@@ -27,6 +29,7 @@ describe('TodoList Test', function () {
             await todoList.connect(owner).createTodo(title, description);
 
         })
+
 
         it('should be able to get single list ', async function () {
             const { todoList, owner } = await loadFixture(deploymentTodoListFixture);
@@ -41,6 +44,7 @@ describe('TodoList Test', function () {
             expect(listStatus).to.equal(1)
 
         })
+
 
         it('should be able to update  list ', async function () {
             const { todoList, owner } = await loadFixture(deploymentTodoListFixture);
@@ -60,21 +64,32 @@ describe('TodoList Test', function () {
 
         })
 
+
+
         it('should be able to get all list', async function () {
             const { todoList, owner } = await loadFixture(deploymentTodoListFixture);
 
             await todoList.connect(owner).getAllTodo()
-        }) 
+        })
 
-        it ('should be able to show complete ', async function () {
+
+
+        it('should be able to show complete ', async function () {
             const { todoList, owner } = await loadFixture(deploymentTodoListFixture);
 
-            const title = 'reading'
-            const description = 'everyday'
+            await todoList.connect(owner).createTodo('Coding Time', 'midnight everyday');
 
-            await todoList
+            const i = 0;
 
-            
+            await todoList.connect(owner).todoCompleted(i)
+
+            const [itemOne, itemTwo, itemThree] = await todoList.getTodo(i)
+
+            expect(itemOne).to.equal("Coding Time")
+            expect(itemTwo).to.equal("midnight everyday")
+            expect(itemThree).to.equal(3)
+
+
         })
     })
 })
